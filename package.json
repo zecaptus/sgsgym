@@ -1,0 +1,13 @@
+{
+  "name": "sgsgym",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:front": "npm run dev -w packages/front",
+    "dev:back": "npm run dev -w packages/back",
+    "build:front": "npm run build -w packages/front",
+    "build:back": "npm run build -w packages/back"
+  }
+}

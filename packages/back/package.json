@@ -1,0 +1,24 @@
+{
+  "name": "@sgsgym/back",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "koa": "^3.1.1",
+    "@koa/router": "^15.3.0",
+    "@koa/cors": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.0",
+    "tsx": "^4.19.0",
+    "@types/node": "^22.0.0",
+    "@types/koa": "^2.15.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/koa__cors": "^5.0.0"
+  }
+}
