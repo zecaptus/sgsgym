@@ -114,7 +114,7 @@ router.post("/login", async (ctx) => {
     email: user.email,
     name: user.name,
     role: { id: user.role.id, name: user.role.name },
-    permissions: user.role.permissions.map((rp) => rp.permission.name),
+    permissions: user.role.permissions.map((rp: { permission: { name: string } }) => rp.permission.name),
   };
 });
 

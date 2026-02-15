@@ -40,7 +40,7 @@ export const sessionMiddleware: Middleware = async (ctx, next) => {
     if (session && session.expiresAt > new Date()) {
       ctx.state.user = session.user;
       ctx.state.permissions = session.user.role.permissions.map(
-        (rp) => rp.permission.name,
+        (rp: { permission: { name: string } }) => rp.permission.name,
       );
     } else if (session) {
       // Expired session — clean up

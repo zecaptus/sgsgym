@@ -16,13 +16,13 @@ router.get("/", requireAuth, requirePermission("roles:read"), async (ctx) => {
     },
     orderBy: { id: "asc" },
   });
-  ctx.body = roles.map((r) => ({
+  ctx.body = roles.map((r: typeof roles[number]) => ({
     id: r.id,
     name: r.name,
     description: r.description,
     builtIn: BUILT_IN_ROLES.includes(r.name),
     userCount: r._count.users,
-    permissions: r.permissions.map((rp) => rp.permission),
+    permissions: r.permissions.map((rp: { permission: { id: number; name: string; description: string | null } }) => rp.permission),
   }));
 });
 
@@ -48,7 +48,7 @@ router.get("/:id", requireAuth, requirePermission("roles:read"), async (ctx) => 
     description: role.description,
     builtIn: BUILT_IN_ROLES.includes(role.name),
     userCount: role._count.users,
-    permissions: role.permissions.map((rp) => rp.permission),
+    permissions: role.permissions.map((rp: { permission: { id: number; name: string; description: string | null } }) => rp.permission),
   };
 });
 
@@ -85,7 +85,7 @@ router.post("/", requireAuth, requirePermission("roles:create"), async (ctx) => 
     name: role.name,
     description: role.description,
     builtIn: false,
-    permissions: role.permissions.map((rp) => rp.permission),
+    permissions: role.permissions.map((rp: { permission: { id: number; name: string; description: string | null } }) => rp.permission),
   };
 });
 
@@ -133,7 +133,7 @@ router.put(
       name: role.name,
       description: role.description,
       builtIn: BUILT_IN_ROLES.includes(role.name),
-      permissions: role.permissions.map((rp) => rp.permission),
+      permissions: role.permissions.map((rp: { permission: { id: number; name: string; description: string | null } }) => rp.permission),
     };
   },
 );
