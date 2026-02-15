@@ -1,4 +1,4 @@
 {
   "installCommand": "cd ../.. && npm install",
-  "buildCommand": "cd ../db && npx tsc && cd ../back && npx tsc"
+  "buildCommand": "cd ../db && npx prisma migrate deploy && npx tsc && cd ../back && npx tsc"
 }

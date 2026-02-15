@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import argon2 from "argon2";
 
 const prisma = new PrismaClient();
+const isProd = process.env.NODE_ENV === "production";
 
 const PERMISSIONS = [
   { name: "users:read", description: "View users" },
@@ -17,6 +18,8 @@ const PERMISSIONS = [
 ] as const;
 
 async function main() {
+  console.log(`Seeding database (${isProd ? "production" : "development"})...`);
+
   // Create permissions
   const permissions = await Promise.all(
     PERMISSIONS.map((p) =>
@@ -43,7 +46,7 @@ async function main() {
     create: { name: "moderator", description: "Read access with admin panel" },
   });
 
-  const customerRole = await prisma.role.upsert({
+  await prisma.role.upsert({
     where: { name: "customer" },
     update: {},
     create: { name: "customer", description: "Regular customer" },
@@ -70,28 +73,33 @@ async function main() {
     });
   }
 
-  // Customer gets no permissions
-
   // Create users
-  const users = [
-    { email: "admin@sgsgym.dev", name: "Admin", password: "admin123", roleId: adminRole.id },
-    { email: "moderator@sgsgym.dev", name: "Moderator", password: "moderator123", roleId: moderatorRole.id },
-    { email: "customer@sgsgym.dev", name: "Customer", password: "customer123", roleId: customerRole.id },
-  ];
-
-  for (const u of users) {
-    const passwordHash = await argon2.hash(u.password);
+  if (isProd) {
+    // Production: admin user only
+    const passwordHash = await argon2.hash("admin123");
     await prisma.user.upsert({
-      where: { email: u.email },
+      where: { email: "admin@sgsgym.dev" },
       update: {},
-      create: {
-        email: u.email,
-        name: u.name,
-        passwordHash,
-        roleId: u.roleId,
-      },
+      create: { email: "admin@sgsgym.dev", name: "Admin", passwordHash, roleId: adminRole.id },
     });
-    console.log(`Seeded user: ${u.email} (${u.name})`);
+    console.log("Seeded user: admin@sgsgym.dev (Admin)");
+  } else {
+    // Development: admin + moderator + customer
+    const devUsers = [
+      { email: "admin@sgsgym.dev", name: "Admin", password: "admin123", roleId: adminRole.id },
+      { email: "moderator@sgsgym.dev", name: "Moderator", password: "moderator123", roleId: moderatorRole.id },
+      { email: "customer@sgsgym.dev", name: "Customer", password: "customer123", roleId: moderatorRole.id },
+    ];
+
+    for (const u of devUsers) {
+      const passwordHash = await argon2.hash(u.password);
+      await prisma.user.upsert({
+        where: { email: u.email },
+        update: {},
+        create: { email: u.email, name: u.name, passwordHash, roleId: u.roleId },
+      });
+      console.log(`Seeded user: ${u.email} (${u.name})`);
+    }
   }
 
   console.log("Seed completed successfully.");
