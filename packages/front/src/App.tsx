@@ -1,23 +1,7 @@
-import { useState, useEffect } from 'react'
-import type { User } from "@sgsgym/db";
+import { useGetUsersQuery } from "./services/api";
 
 function App() {
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    fetch("http://localhost:3001/api/users")
-      .then((res) => {
-        if (!res.ok) throw new Error(`Erreur HTTP ${res.status}`)
-        return res.json()
-      })
-      .then((data: User[]) => setUsers(data))
-      .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "Erreur inconnue")
-      })
-      .finally(() => setLoading(false))
-  }, [])
+  const { data: users, isLoading, error } = useGetUsersQuery();
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
@@ -29,21 +13,23 @@ function App() {
 
         <h2 className="text-2xl font-semibold mb-4">Utilisateurs</h2>
 
-        {loading && (
+        {isLoading && (
           <p className="text-gray-400 animate-pulse">Chargement...</p>
         )}
 
         {error && (
           <div className="bg-red-900/50 border border-red-700 text-red-300 rounded-lg p-4">
-            {error}
+            {"status" in error
+              ? `Erreur HTTP ${error.status}`
+              : error.message ?? "Erreur inconnue"}
           </div>
         )}
 
-        {!loading && !error && users.length === 0 && (
+        {!isLoading && !error && users?.length === 0 && (
           <p className="text-gray-500">Aucun utilisateur.</p>
         )}
 
-        {!loading && !error && users.length > 0 && (
+        {!isLoading && !error && users && users.length > 0 && (
           <div className="overflow-x-auto rounded-xl border border-gray-700">
             <table className="w-full text-left">
               <thead className="bg-gray-800 text-gray-300 text-sm uppercase tracking-wider">
@@ -75,7 +61,7 @@ function App() {
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
