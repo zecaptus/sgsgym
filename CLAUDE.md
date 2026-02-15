@@ -16,6 +16,11 @@ Monorepo pour l'application SGS Gym.
 - `npm run build:front` — Build production du front
 - `npm run build:back` — Compilation TypeScript du back
 
+## Git
+
+- **Branche principale de développement** : `develop` — tous les commits et PRs se font sur cette branche
+- **Branche de production** : `master` — réservée aux releases stables
+
 ## Conventions
 
 - **Langue** : Le code (variables, fonctions, commentaires) est en anglais
