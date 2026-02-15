@@ -31,6 +31,7 @@ packages/front/
 - Composants fonctionnels avec hooks uniquement (pas de classes)
 - ESM (`"type": "module"`)
 - TypeScript strict mode
+- **i18n (react-intl)** : Tous les textes visibles utilisent `<FormattedMessage id="..." />` ou `intl.formatMessage()`. Jamais de texte en dur dans le JSX. Les clés de traduction sont définies dans `src/i18n/fr.ts`.
 
 ## Commandes
 

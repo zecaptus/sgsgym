@@ -1,67 +1,48 @@
-import { useGetUsersQuery } from "./services/api";
+import { BrowserRouter, Routes, Route } from "react-router";
+import AppLayout from "./components/layout/AppLayout.js";
+import AdminLayout from "./components/layout/AdminLayout.js";
+import AuthGuard from "./components/guards/AuthGuard.js";
+import GuestGuard from "./components/guards/GuestGuard.js";
+import PermissionGuard from "./components/guards/PermissionGuard.js";
+import HomePage from "./pages/HomePage.js";
+import LoginPage from "./pages/LoginPage.js";
+import SignupPage from "./pages/SignupPage.js";
+import ForbiddenPage from "./pages/ForbiddenPage.js";
+import NotFoundPage from "./pages/NotFoundPage.js";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage.js";
+import AdminUsersPage from "./pages/admin/AdminUsersPage.js";
+import AdminRolesPage from "./pages/admin/AdminRolesPage.js";
+import AdminRoleEditPage from "./pages/admin/AdminRoleEditPage.js";
 
-function App() {
-  const { data: users, isLoading, error } = useGetUsersQuery();
-
+export default function App() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-5xl font-bold mb-2 text-center">SGS Gym</h1>
-        <p className="text-lg text-gray-400 mb-10 text-center">
-          Bienvenue sur la plateforme SGS Gym
-        </p>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<HomePage />} />
 
-        <h2 className="text-2xl font-semibold mb-4">Utilisateurs</h2>
+          {/* Guest-only routes */}
+          <Route element={<GuestGuard />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
+          </Route>
 
-        {isLoading && (
-          <p className="text-gray-400 animate-pulse">Chargement...</p>
-        )}
+          {/* Admin routes */}
+          <Route element={<AuthGuard />}>
+            <Route element={<PermissionGuard permission="admin:access" />}>
+              <Route path="admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboardPage />} />
+                <Route path="users" element={<AdminUsersPage />} />
+                <Route path="roles" element={<AdminRolesPage />} />
+                <Route path="roles/:id" element={<AdminRoleEditPage />} />
+              </Route>
+            </Route>
+          </Route>
 
-        {error && (
-          <div className="bg-red-900/50 border border-red-700 text-red-300 rounded-lg p-4">
-            {"status" in error
-              ? `Erreur HTTP ${error.status}`
-              : error.message ?? "Erreur inconnue"}
-          </div>
-        )}
-
-        {!isLoading && !error && users?.length === 0 && (
-          <p className="text-gray-500">Aucun utilisateur.</p>
-        )}
-
-        {!isLoading && !error && users && users.length > 0 && (
-          <div className="overflow-x-auto rounded-xl border border-gray-700">
-            <table className="w-full text-left">
-              <thead className="bg-gray-800 text-gray-300 text-sm uppercase tracking-wider">
-                <tr>
-                  <th className="px-6 py-3">ID</th>
-                  <th className="px-6 py-3">Nom</th>
-                  <th className="px-6 py-3">Email</th>
-                  <th className="px-6 py-3">Inscrit le</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-800/60 transition-colors">
-                    <td className="px-6 py-4 font-mono text-sm text-gray-400">
-                      {user.id}
-                    </td>
-                    <td className="px-6 py-4 font-medium">
-                      {user.name ?? <span className="text-gray-500 italic">Non renseigne</span>}
-                    </td>
-                    <td className="px-6 py-4 text-indigo-400">{user.email}</td>
-                    <td className="px-6 py-4 text-sm text-gray-400">
-                      {new Date(user.createdAt).toLocaleDateString("fr-FR")}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
+          <Route path="403" element={<ForbiddenPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

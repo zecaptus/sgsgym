@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm info:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsx:*)",
+      "Bash(git -C /home/captus/Projects/sgsgym status)",
+      "Bash(git -C /home/captus/Projects/sgsgym log --oneline -3)",
+      "Bash(npm run db:generate:*)",
+      "Bash(npm run db:push:*)",
+      "Bash(npx -w @sgsgym/back tsc:*)",
+      "Bash(timeout 5 npx:*)"
+    ]
+  }
+}

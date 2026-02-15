@@ -1,2 +1,8 @@
 export { prisma } from "./client.js";
-export type { User } from "@prisma/client";
+export type {
+  User,
+  Role,
+  Permission,
+  RolePermission,
+  Session,
+} from "@prisma/client";

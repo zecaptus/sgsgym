@@ -15,7 +15,9 @@
     "db:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.5.0"
+    "@prisma/client": "^6.5.0",
+    "argon2": "^0.44.0",
+    "dotenv": "^16.6.1"
   },
   "devDependencies": {
     "prisma": "^6.5.0",
