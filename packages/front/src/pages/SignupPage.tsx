@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import { useSignupMutation } from "../services/auth.js";
 
 export default function SignupPage() {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const [signup, { isLoading }] = useSignupMutation();
   const [name, setName] = useState("");
@@ -20,14 +20,14 @@ export default function SignupPage() {
       navigate("/");
     } catch (err) {
       const apiErr = err as { data?: { error?: string } };
-      setError(apiErr.data?.error ?? intl.formatMessage({ id: "error.generic" }));
+      setError(apiErr.data?.error ?? formatMessage({ id: "error.generic" }));
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6 text-center">
-        <FormattedMessage id="signup.title" />
+        {formatMessage({ id: "signup.title" })}
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
@@ -37,7 +37,7 @@ export default function SignupPage() {
         )}
         <div>
           <label className="block text-sm text-gray-300 mb-1">
-            <FormattedMessage id="signup.name" />
+            {formatMessage({ id: "signup.name" })}
           </label>
           <input
             type="text"
@@ -48,7 +48,7 @@ export default function SignupPage() {
         </div>
         <div>
           <label className="block text-sm text-gray-300 mb-1">
-            <FormattedMessage id="signup.email" />
+            {formatMessage({ id: "signup.email" })}
           </label>
           <input
             type="email"
@@ -60,7 +60,7 @@ export default function SignupPage() {
         </div>
         <div>
           <label className="block text-sm text-gray-300 mb-1">
-            <FormattedMessage id="signup.password" />
+            {formatMessage({ id: "signup.password" })}
           </label>
           <input
             type="password"
@@ -75,13 +75,13 @@ export default function SignupPage() {
           disabled={isLoading}
           className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white py-2 rounded-lg transition-colors"
         >
-          <FormattedMessage id="signup.submit" />
+          {formatMessage({ id: "signup.submit" })}
         </button>
       </form>
       <p className="mt-4 text-center text-gray-400 text-sm">
-        <FormattedMessage id="signup.hasAccount" />{" "}
+        {formatMessage({ id: "signup.hasAccount" })}{" "}
         <Link to="/login" className="text-indigo-400 hover:underline">
-          <FormattedMessage id="signup.loginLink" />
+          {formatMessage({ id: "signup.loginLink" })}
         </Link>
       </p>
     </div>

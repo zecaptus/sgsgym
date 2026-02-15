@@ -1,4 +1,4 @@
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import {
   useGetUsersQuery,
   useUpdateUserRoleMutation,
@@ -8,7 +8,7 @@ import { useGetRolesQuery } from "../../services/roles.js";
 import { useGetMeQuery } from "../../services/auth.js";
 
 export default function AdminUsersPage() {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const { data: users, isLoading } = useGetUsersQuery();
   const { data: roles } = useGetRolesQuery();
   const { data: me } = useGetMeQuery();
@@ -24,7 +24,7 @@ export default function AdminUsersPage() {
   };
 
   const handleDelete = (userId: number) => {
-    if (confirm(intl.formatMessage({ id: "admin.users.deleteConfirm" }))) {
+    if (confirm(formatMessage({ id: "admin.users.deleteConfirm" }))) {
       deleteUser(userId);
     }
   };
@@ -32,7 +32,7 @@ export default function AdminUsersPage() {
   if (isLoading) {
     return (
       <p className="text-gray-400">
-        <FormattedMessage id="common.loading" />
+        {formatMessage({ id: "common.loading" })}
       </p>
     );
   }
@@ -40,12 +40,12 @@ export default function AdminUsersPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">
-        <FormattedMessage id="admin.users.title" />
+        {formatMessage({ id: "admin.users.title" })}
       </h1>
 
       {!users?.length ? (
         <p className="text-gray-500">
-          <FormattedMessage id="admin.users.noUsers" />
+          {formatMessage({ id: "admin.users.noUsers" })}
         </p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-gray-700">
@@ -53,20 +53,20 @@ export default function AdminUsersPage() {
             <thead className="bg-gray-800 text-gray-300 text-sm uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="common.id" />
+                  {formatMessage({ id: "common.id" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.users.name" />
+                  {formatMessage({ id: "admin.users.name" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.users.email" />
+                  {formatMessage({ id: "admin.users.email" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.users.role" />
+                  {formatMessage({ id: "admin.users.role" })}
                 </th>
                 {(canUpdate || canDelete) && (
                   <th className="px-6 py-3">
-                    <FormattedMessage id="admin.users.actions" />
+                    {formatMessage({ id: "admin.users.actions" })}
                   </th>
                 )}
               </tr>
@@ -108,7 +108,7 @@ export default function AdminUsersPage() {
                           onClick={() => handleDelete(user.id)}
                           className="text-red-400 hover:text-red-300 text-sm"
                         >
-                          <FormattedMessage id="admin.users.delete" />
+                          {formatMessage({ id: "admin.users.delete" })}
                         </button>
                       )}
                     </td>

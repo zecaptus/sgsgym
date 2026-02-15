@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import { useLoginMutation } from "../services/auth.js";
 
 export default function LoginPage() {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const [email, setEmail] = useState("");
@@ -19,14 +19,14 @@ export default function LoginPage() {
       navigate("/");
     } catch (err) {
       const apiErr = err as { data?: { error?: string } };
-      setError(apiErr.data?.error ?? intl.formatMessage({ id: "error.generic" }));
+      setError(apiErr.data?.error ?? formatMessage({ id: "error.generic" }));
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6 text-center">
-        <FormattedMessage id="login.title" />
+        {formatMessage({ id: "login.title" })}
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         {error && (
@@ -36,7 +36,7 @@ export default function LoginPage() {
         )}
         <div>
           <label className="block text-sm text-gray-300 mb-1">
-            <FormattedMessage id="login.email" />
+            {formatMessage({ id: "login.email" })}
           </label>
           <input
             type="email"
@@ -48,7 +48,7 @@ export default function LoginPage() {
         </div>
         <div>
           <label className="block text-sm text-gray-300 mb-1">
-            <FormattedMessage id="login.password" />
+            {formatMessage({ id: "login.password" })}
           </label>
           <input
             type="password"
@@ -63,13 +63,13 @@ export default function LoginPage() {
           disabled={isLoading}
           className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white py-2 rounded-lg transition-colors"
         >
-          <FormattedMessage id="login.submit" />
+          {formatMessage({ id: "login.submit" })}
         </button>
       </form>
       <p className="mt-4 text-center text-gray-400 text-sm">
-        <FormattedMessage id="login.noAccount" />{" "}
+        {formatMessage({ id: "login.noAccount" })}{" "}
         <Link to="/signup" className="text-indigo-400 hover:underline">
-          <FormattedMessage id="login.signupLink" />
+          {formatMessage({ id: "login.signupLink" })}
         </Link>
       </p>
     </div>

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import { useGetRoleQuery, useUpdateRoleMutation } from "../../services/roles.js";
 import { useGetPermissionsQuery } from "../../services/permissions.js";
 
 export default function AdminRoleEditPage() {
   const { id } = useParams<{ id: string }>();
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const navigate = useNavigate();
   const { data: role, isLoading: roleLoading } = useGetRoleQuery(Number(id));
   const { data: allPermissions, isLoading: permsLoading } =
@@ -44,7 +44,7 @@ export default function AdminRoleEditPage() {
   if (roleLoading || permsLoading) {
     return (
       <p className="text-gray-400">
-        <FormattedMessage id="common.loading" />
+        {formatMessage({ id: "common.loading" })}
       </p>
     );
   }
@@ -52,7 +52,7 @@ export default function AdminRoleEditPage() {
   if (!role) {
     return (
       <p className="text-red-400">
-        <FormattedMessage id="error.notFound.title" />
+        {formatMessage({ id: "error.notFound.title" })}
       </p>
     );
   }
@@ -64,15 +64,15 @@ export default function AdminRoleEditPage() {
           onClick={() => navigate("/admin/roles")}
           className="text-gray-400 hover:text-white transition-colors"
         >
-          <FormattedMessage id="admin.roleEdit.back" />
+          {formatMessage({ id: "admin.roleEdit.back" })}
         </button>
         <h1 className="text-3xl font-bold">
-          <FormattedMessage id="admin.roleEdit.title" /> — {role.name}
+          {formatMessage({ id: "admin.roleEdit.title" })} — {role.name}
         </h1>
       </div>
 
       <h2 className="text-xl font-semibold mb-4">
-        <FormattedMessage id="admin.roleEdit.permissionsLabel" />
+        {formatMessage({ id: "admin.roleEdit.permissionsLabel" })}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
@@ -103,8 +103,8 @@ export default function AdminRoleEditPage() {
         className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white px-6 py-2 rounded-lg transition-colors"
       >
         {saving
-          ? intl.formatMessage({ id: "common.loading" })
-          : intl.formatMessage({ id: "admin.roleEdit.save" })}
+          ? formatMessage({ id: "common.loading" })
+          : formatMessage({ id: "admin.roleEdit.save" })}
       </button>
     </div>
   );

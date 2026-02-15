@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 import {
   useGetRolesQuery,
   useCreateRoleMutation,
@@ -8,7 +8,7 @@ import {
 } from "../../services/roles.js";
 
 export default function AdminRolesPage() {
-  const intl = useIntl();
+  const { formatMessage } = useIntl();
   const { data: roles, isLoading } = useGetRolesQuery();
   const [createRole] = useCreateRoleMutation();
   const [deleteRole] = useDeleteRoleMutation();
@@ -22,7 +22,7 @@ export default function AdminRolesPage() {
   };
 
   const handleDelete = (id: number) => {
-    if (confirm(intl.formatMessage({ id: "admin.roles.deleteConfirm" }))) {
+    if (confirm(formatMessage({ id: "admin.roles.deleteConfirm" }))) {
       deleteRole(id);
     }
   };
@@ -30,7 +30,7 @@ export default function AdminRolesPage() {
   if (isLoading) {
     return (
       <p className="text-gray-400">
-        <FormattedMessage id="common.loading" />
+        {formatMessage({ id: "common.loading" })}
       </p>
     );
   }
@@ -38,7 +38,7 @@ export default function AdminRolesPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">
-        <FormattedMessage id="admin.roles.title" />
+        {formatMessage({ id: "admin.roles.title" })}
       </h1>
 
       <form onSubmit={handleCreate} className="flex gap-3 mb-6">
@@ -46,20 +46,20 @@ export default function AdminRolesPage() {
           type="text"
           value={newRoleName}
           onChange={(e) => setNewRoleName(e.target.value)}
-          placeholder={intl.formatMessage({ id: "admin.roles.name" })}
+          placeholder={formatMessage({ id: "admin.roles.name" })}
           className="px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-indigo-500"
         />
         <button
           type="submit"
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
         >
-          <FormattedMessage id="admin.roles.create" />
+          {formatMessage({ id: "admin.roles.create" })}
         </button>
       </form>
 
       {!roles?.length ? (
         <p className="text-gray-500">
-          <FormattedMessage id="admin.roles.noRoles" />
+          {formatMessage({ id: "admin.roles.noRoles" })}
         </p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-gray-700">
@@ -67,19 +67,19 @@ export default function AdminRolesPage() {
             <thead className="bg-gray-800 text-gray-300 text-sm uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="common.id" />
+                  {formatMessage({ id: "common.id" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.roles.name" />
+                  {formatMessage({ id: "admin.roles.name" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.roles.permissions" />
+                  {formatMessage({ id: "admin.roles.permissions" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.roles.users" />
+                  {formatMessage({ id: "admin.roles.users" })}
                 </th>
                 <th className="px-6 py-3">
-                  <FormattedMessage id="admin.roles.actions" />
+                  {formatMessage({ id: "admin.roles.actions" })}
                 </th>
               </tr>
             </thead>
@@ -96,7 +96,7 @@ export default function AdminRolesPage() {
                     {role.name}
                     {role.builtIn && (
                       <span className="ml-2 text-xs bg-gray-700 text-gray-400 px-2 py-0.5 rounded">
-                        <FormattedMessage id="admin.roles.builtIn" />
+                        {formatMessage({ id: "admin.roles.builtIn" })}
                       </span>
                     )}
                   </td>
@@ -109,14 +109,14 @@ export default function AdminRolesPage() {
                       to={`/admin/roles/${role.id}`}
                       className="text-indigo-400 hover:text-indigo-300 text-sm"
                     >
-                      <FormattedMessage id="admin.roles.edit" />
+                      {formatMessage({ id: "admin.roles.edit" })}
                     </Link>
                     {!role.builtIn && (
                       <button
                         onClick={() => handleDelete(role.id)}
                         className="text-red-400 hover:text-red-300 text-sm"
                       >
-                        <FormattedMessage id="admin.roles.delete" />
+                        {formatMessage({ id: "admin.roles.delete" })}
                       </button>
                     )}
                   </td>

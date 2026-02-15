@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { useGetMeQuery } from "../../services/auth.js";
 
 interface NavItem {
@@ -16,6 +16,7 @@ const navItems: NavItem[] = [
 ];
 
 export default function AdminLayout() {
+  const { formatMessage } = useIntl();
   const { data: me } = useGetMeQuery();
   const isAdmin = me?.role.name === "admin";
 
@@ -27,7 +28,7 @@ export default function AdminLayout() {
     <div className="flex min-h-[calc(100vh-4rem)]">
       <aside className="w-64 bg-gray-800 border-r border-gray-700 p-4">
         <h2 className="text-lg font-semibold text-gray-200 mb-4">
-          <FormattedMessage id="nav.admin" />
+          {formatMessage({ id: "nav.admin" })}
         </h2>
         <nav className="flex flex-col gap-1">
           {visibleItems.map((item) => (
@@ -43,7 +44,7 @@ export default function AdminLayout() {
                 }`
               }
             >
-              <FormattedMessage id={item.label} />
+              {formatMessage({ id: item.label })}
             </NavLink>
           ))}
         </nav>

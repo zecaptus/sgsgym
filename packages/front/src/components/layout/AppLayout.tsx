@@ -1,10 +1,11 @@
 import { Link, Outlet } from "react-router";
-import { FormattedMessage } from "react-intl";
+import { useIntl } from "react-intl";
 import { useDispatch } from "react-redux";
 import { useGetMeQuery, useLogoutMutation } from "../../services/auth.js";
 import { api } from "../../services/api.js";
 
 export default function AppLayout() {
+  const { formatMessage } = useIntl();
   const { data: user } = useGetMeQuery();
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ export default function AppLayout() {
                 to="/"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                <FormattedMessage id="nav.home" />
+                {formatMessage({ id: "nav.home" })}
               </Link>
               {user ? (
                 <>
@@ -39,14 +40,14 @@ export default function AppLayout() {
                       to="/admin"
                       className="text-gray-300 hover:text-white transition-colors"
                     >
-                      <FormattedMessage id="nav.admin" />
+                      {formatMessage({ id: "nav.admin" })}
                     </Link>
                   )}
                   <button
                     onClick={handleLogout}
                     className="text-gray-300 hover:text-white transition-colors"
                   >
-                    <FormattedMessage id="nav.logout" />
+                    {formatMessage({ id: "nav.logout" })}
                   </button>
                 </>
               ) : (
@@ -55,13 +56,13 @@ export default function AppLayout() {
                     to="/login"
                     className="text-gray-300 hover:text-white transition-colors"
                   >
-                    <FormattedMessage id="nav.login" />
+                    {formatMessage({ id: "nav.login" })}
                   </Link>
                   <Link
                     to="/signup"
                     className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
                   >
-                    <FormattedMessage id="nav.signup" />
+                    {formatMessage({ id: "nav.signup" })}
                   </Link>
                 </>
               )}
