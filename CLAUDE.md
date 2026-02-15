@@ -7,6 +7,7 @@ Monorepo pour l'application SGS Gym.
 - **Monorepo npm workspaces** avec les packages dans `packages/`
 - `packages/front` — Application frontend React + Vite + TypeScript
 - `packages/back` — API backend Node.js + Koa v3 + TypeScript
+- `packages/db` — Base de données Prisma + PostgreSQL (types partagés)
 
 ## Scripts racine
 
@@ -28,3 +29,4 @@ Monorepo pour l'application SGS Gym.
 Lors du travail sur ce projet, utiliser les agents appropriés :
 - **Agent Front** : Pour tout ce qui concerne `packages/front` — voir `packages/front/CLAUDE.md`
 - **Agent Back** : Pour tout ce qui concerne `packages/back` — voir `packages/back/CLAUDE.md`
+- **Agent DB** : Pour tout ce qui concerne `packages/db` (schéma, migrations, Prisma) — voir `packages/db/CLAUDE.md`
