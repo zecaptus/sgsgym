@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "dev:front": "npm run dev -w packages/front",
-    "dev:back": "npm run dev -w packages/back",
+    "dev:back": "npm run build -w @sgsgym/db && npm run dev -w @sgsgym/back",
     "build:front": "npm run build -w packages/front",
     "build:back": "npm run build -w packages/back"
   }
