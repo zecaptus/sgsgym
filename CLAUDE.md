@@ -20,6 +20,8 @@ Monorepo pour l'application SGS Gym.
 
 - **Branche principale de développement** : `develop` — tous les commits et PRs se font sur cette branche
 - **Branche de production** : `master` — réservée aux releases stables
+- **Commits** : Format Conventional Commits obligatoire, validé par commitlint + husky
+- **Détails** : Voir `.github/CLAUDE.md` pour les règles complètes
 
 ## Conventions
 
@@ -35,3 +37,4 @@ Lors du travail sur ce projet, utiliser les agents appropriés :
 - **Agent Front** : Pour tout ce qui concerne `packages/front` — voir `packages/front/CLAUDE.md`
 - **Agent Back** : Pour tout ce qui concerne `packages/back` — voir `packages/back/CLAUDE.md`
 - **Agent DB** : Pour tout ce qui concerne `packages/db` (schéma, migrations, Prisma) — voir `packages/db/CLAUDE.md`
+- **Agent Git** : Pour tout ce qui concerne Git, commits, branches et workflow — voir `.github/CLAUDE.md`
