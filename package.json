@@ -11,7 +11,7 @@
     "dev:back": "npm run build -w @sgsgym/db && npm run dev -w @sgsgym/back",
     "build:front": "npm run build -w packages/front",
     "build:back": "npm run build -w packages/back",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.1",
