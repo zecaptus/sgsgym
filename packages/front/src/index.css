@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+@theme {
+  --color-sgs-red: #b71c1c;
+  --color-sgs-red-dark: #8b1515;
+  --color-sgs-red-light: #ef5350;
+  --color-sgs-dark: #1a1a1a;
+  --color-sgs-darker: #111111;
+  --color-sgs-light: #f5f5f5;
+}
