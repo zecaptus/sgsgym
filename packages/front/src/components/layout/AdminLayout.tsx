@@ -26,7 +26,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex min-h-[calc(100vh-4rem)]">
-      <aside className="w-64 bg-gray-800 border-r border-gray-700 p-4">
+      <aside className="w-64 bg-gray-800 border-r border-gray-700 p-4 flex flex-col">
         <h2 className="text-lg font-semibold text-gray-200 mb-4">
           {formatMessage({ id: "nav.admin" })}
         </h2>
@@ -48,6 +48,7 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </nav>
+        <p className="mt-auto pt-4 text-xs text-gray-500">v{__APP_VERSION__}</p>
       </aside>
       <div className="flex-1 p-8">
         <Outlet />
