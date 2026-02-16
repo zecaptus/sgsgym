@@ -1,0 +1,73 @@
+name: Release — Auto-tag Alpha/RC
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from branch name
+        id: version
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/release/}"
+          echo "version=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Determine next tag
+        id: next-tag
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # Get all existing tags for this version
+          EXISTING_TAGS=$(git tag -l "${VERSION}-*" | sort -V)
+
+          # Check if we're in RC phase (rc tag exists)
+          RC_TAGS=$(echo "$EXISTING_TAGS" | grep -E "^${VERSION}-rc\." || true)
+
+          if [ -n "$RC_TAGS" ]; then
+            # RC phase: increment RC counter
+            LAST_RC=$(echo "$RC_TAGS" | tail -1)
+            LAST_N=$(echo "$LAST_RC" | grep -oP 'rc\.\K[0-9]+')
+            NEXT_N=$((LAST_N + 1))
+            NEXT_TAG="${VERSION}-rc.${NEXT_N}"
+          else
+            # Alpha phase: increment alpha counter
+            ALPHA_TAGS=$(echo "$EXISTING_TAGS" | grep -E "^${VERSION}-alpha\." || true)
+
+            if [ -n "$ALPHA_TAGS" ]; then
+              LAST_ALPHA=$(echo "$ALPHA_TAGS" | tail -1)
+              LAST_N=$(echo "$LAST_ALPHA" | grep -oP 'alpha\.\K[0-9]+')
+              NEXT_N=$((LAST_N + 1))
+            else
+              NEXT_N=0
+            fi
+
+            NEXT_TAG="${VERSION}-alpha.${NEXT_N}"
+          fi
+
+          echo "tag=$NEXT_TAG" >> "$GITHUB_OUTPUT"
+          echo "Next tag: $NEXT_TAG"
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.next-tag.outputs.tag }}" -m "Pre-release ${{ steps.next-tag.outputs.tag }}"
+          git push origin "${{ steps.next-tag.outputs.tag }}"
+
+      - name: Create GitHub pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.next-tag.outputs.tag }}
+          prerelease: true
+          generate_release_notes: true
