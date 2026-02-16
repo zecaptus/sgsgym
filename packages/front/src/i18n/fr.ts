@@ -9,9 +9,79 @@ const messages: Record<string, string> = {
   "nav.users": "Utilisateurs",
   "nav.roles": "Rôles",
 
-  // Home
-  "home.title": "SGS Gym",
-  "home.subtitle": "Bienvenue sur la plateforme SGS Gym",
+  // Home - Hero
+  "home.hero.title.line1": "L'EXCELLENCE",
+  "home.hero.title.line2": "GYMNIQUE",
+  "home.hero.cta": "REJOINDRE LE CLUB",
+
+  // Home - Passion section
+  "home.passion.title.line1": "PASSION",
+  "home.passion.title.line2": "& MOUVEMENT",
+  "home.passion.description":
+    "Sainte-Geneviève Sports Gymnastique. La rigueur et le dépassement de soi, du loisir à la performance nationale. Depuis près de 90 ans, nous formons des gymnastes d'exception.",
+  "home.passion.cta": "DÉCOUVRIR LES HORAIRES",
+  "home.passion.links.about": "À propos",
+  "home.passion.links.contact": "Contact",
+  "home.passion.links.events": "Événements",
+
+  // Home - Club section
+  "home.club.title.line1": "LE CLUB",
+  "home.club.title.line2": "QUI BOUGE",
+
+  // Home - Art section
+  "home.art.title.line1": "L'ART DU",
+  "home.art.title.line2": "GESTE",
+  "home.art.description":
+    "La gymnastique est une école de la vie. Apprendre, répéter, perfectionner chaque mouvement jusqu'à l'excellence. 7 entraîneurs diplômés encadrent nos 250 gymnastes au quotidien.",
+
+  // Home - Stats
+  "home.stats.members": "Gymnastes",
+  "home.stats.coaches": "Entraîneurs",
+  "home.stats.hours": "Heures / semaine",
+  "home.stats.years": "Ans d'histoire",
+
+  // Home - Programs
+  "home.programs.title": "NOS DISCIPLINES",
+  "home.programs.eveil.title": "Éveil gymnique",
+  "home.programs.eveil.age": "12 mois — 3 ans",
+  "home.programs.eveil.description":
+    "Parcours de motricité et d'agilité en salle. Les parents accompagnent leurs enfants jusqu'à 2 ans pour partager ce moment d'éveil sportif.",
+  "home.programs.babygym.title": "Baby-Gym",
+  "home.programs.babygym.age": "4 — 5 ans",
+  "home.programs.babygym.description":
+    "Parcours ludiques et techniques adaptés, sans les parents. Les enfants développent leur assurance et découvrent les bases de la gymnastique.",
+  "home.programs.decouverte.title": "Découverte",
+  "home.programs.decouverte.age": "6 — 13 ans",
+  "home.programs.decouverte.description":
+    "Pour les débutantes et débutants souhaitant découvrir la gymnastique artistique. 1 séance de 1h30 par semaine aux agrès.",
+  "home.programs.competition.title": "Compétition",
+  "home.programs.competition.age": "À partir de 6 ans",
+  "home.programs.competition.description":
+    "Du niveau amical au national, nos gymnastes participent à des compétitions fédérales. 2 séances de 1h30 par semaine minimum.",
+  "home.programs.gaf.title": "GAF",
+  "home.programs.gaf.age": "Artistique Féminine",
+  "home.programs.gaf.description":
+    "Sol, saut, poutre et barres asymétriques : les 4 agrès féminins pour développer force, souplesse et grâce.",
+  "home.programs.gam.title": "GAM",
+  "home.programs.gam.age": "Artistique Masculine",
+  "home.programs.gam.description":
+    "Sol, saut, barre fixe, barres parallèles et cheval d'arçons : les agrès masculins pour développer puissance et agilité.",
+
+  // Home - Contact
+  "home.contact.title": "NOUS TROUVER",
+  "home.contact.gym": "Gymnase Raymond Poulidor",
+  "home.contact.address": "Rue Léo Lagrange, 91700 Sainte-Geneviève-des-Bois",
+  "home.contact.phone": "09 81 49 96 53",
+  "home.contact.phoneNote": "(fonctionnel pendant les cours)",
+  "home.contact.email": "gymart.sgs91@gmail.com",
+  "home.contact.website": "www.sgsgym.fr",
+  "home.contact.registration": "Pré-inscription en ligne",
+
+  // Home - CTA
+  "home.cta.title": "VOTRE PARCOURS COMMENCE ICI",
+  "home.cta.subtitle":
+    "Les inscriptions pour la nouvelle saison sont ouvertes. Ne manquez pas votre place.",
+  "home.cta.button": "INFORMATIONS & INSCRIPTIONS",
 
   // Login
   "login.title": "Connexion",
