@@ -10,25 +10,29 @@ const messages: Record<string, string> = {
   "nav.roles": "Rôles",
 
   // Home - Hero
-  "home.title": "SGS",
-  "home.title.accent": "GYMNASTIQUE",
-  "home.hero.headline":
-    "L'EXCELLENCE GYMNIQUE À SAINTE-GENEVIÈVE-DES-BOIS",
-  "home.hero.subtitle":
-    "Passion, Rigueur et Performance. Du Baby Gym au haut niveau national.",
+  "home.hero.title.line1": "L'EXCELLENCE",
+  "home.hero.title.line2": "GYMNIQUE",
   "home.hero.cta": "REJOINDRE LE CLUB",
 
-  // Home - Philosophy
-  "home.philosophy.title": "NOTRE PHILOSOPHIE",
-  "home.philosophy.performance.title": "PERFORMANCE",
-  "home.philosophy.performance.description":
-    "Des entraîneurs diplômés d'État pour accompagner chaque gymnaste vers son meilleur niveau, de l'amical au national.",
-  "home.philosophy.passion.title": "PASSION",
-  "home.philosophy.passion.description":
-    "L'amour du sport et du mouvement au cœur de chaque entraînement, pour tous les âges, de 12 mois aux adultes.",
-  "home.philosophy.community.title": "COMMUNAUTÉ",
-  "home.philosophy.community.description":
-    "Plus qu'un club, une famille sportive de 250 adhérents unie sous les couleurs Rouge et Blanc depuis près de 90 ans.",
+  // Home - Passion section
+  "home.passion.title.line1": "PASSION",
+  "home.passion.title.line2": "& MOUVEMENT",
+  "home.passion.description":
+    "Sainte-Geneviève Sports Gymnastique. La rigueur et le dépassement de soi, du loisir à la performance nationale. Depuis près de 90 ans, nous formons des gymnastes d'exception.",
+  "home.passion.cta": "DÉCOUVRIR LES HORAIRES",
+  "home.passion.links.about": "À propos",
+  "home.passion.links.contact": "Contact",
+  "home.passion.links.events": "Événements",
+
+  // Home - Club section
+  "home.club.title.line1": "LE CLUB",
+  "home.club.title.line2": "QUI BOUGE",
+
+  // Home - Art section
+  "home.art.title.line1": "L'ART DU",
+  "home.art.title.line2": "GESTE",
+  "home.art.description":
+    "La gymnastique est une école de la vie. Apprendre, répéter, perfectionner chaque mouvement jusqu'à l'excellence. 7 entraîneurs diplômés encadrent nos 250 gymnastes au quotidien.",
 
   // Home - Stats
   "home.stats.members": "Gymnastes",
@@ -39,15 +43,15 @@ const messages: Record<string, string> = {
   // Home - Programs
   "home.programs.title": "NOS DISCIPLINES",
   "home.programs.eveil.title": "Éveil gymnique",
-  "home.programs.eveil.age": "12 mois à 3 ans",
+  "home.programs.eveil.age": "12 mois — 3 ans",
   "home.programs.eveil.description":
     "Parcours de motricité et d'agilité en salle. Les parents accompagnent leurs enfants jusqu'à 2 ans pour partager ce moment d'éveil sportif.",
   "home.programs.babygym.title": "Baby-Gym",
-  "home.programs.babygym.age": "4 à 5 ans",
+  "home.programs.babygym.age": "4 — 5 ans",
   "home.programs.babygym.description":
     "Parcours ludiques et techniques adaptés, sans les parents. Les enfants développent leur assurance et découvrent les bases de la gymnastique.",
   "home.programs.decouverte.title": "Découverte",
-  "home.programs.decouverte.age": "6 à 13 ans",
+  "home.programs.decouverte.age": "6 — 13 ans",
   "home.programs.decouverte.description":
     "Pour les débutantes et débutants souhaitant découvrir la gymnastique artistique. 1 séance de 1h30 par semaine aux agrès.",
   "home.programs.competition.title": "Compétition",
@@ -55,11 +59,11 @@ const messages: Record<string, string> = {
   "home.programs.competition.description":
     "Du niveau amical au national, nos gymnastes participent à des compétitions fédérales. 2 séances de 1h30 par semaine minimum.",
   "home.programs.gaf.title": "GAF",
-  "home.programs.gaf.age": "Gymnastique Artistique Féminine",
+  "home.programs.gaf.age": "Artistique Féminine",
   "home.programs.gaf.description":
     "Sol, saut, poutre et barres asymétriques : les 4 agrès féminins pour développer force, souplesse et grâce.",
   "home.programs.gam.title": "GAM",
-  "home.programs.gam.age": "Gymnastique Artistique Masculine",
+  "home.programs.gam.age": "Artistique Masculine",
   "home.programs.gam.description":
     "Sol, saut, barre fixe, barres parallèles et cheval d'arçons : les agrès masculins pour développer puissance et agilité.",
 
