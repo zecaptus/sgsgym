@@ -20,11 +20,11 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      <nav className="bg-gray-800 border-b border-gray-700">
+      <nav className="bg-sgs-darker border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="text-xl font-bold text-white">
-              SGS Gym
+            <Link to="/" className="text-xl font-extrabold text-white uppercase tracking-wider">
+              SGS <span className="text-sgs-red">Gym</span>
             </Link>
             <div className="flex items-center gap-4">
               <Link
@@ -60,7 +60,7 @@ export default function AppLayout() {
                   </Link>
                   <Link
                     to="/signup"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
+                    className="bg-sgs-red hover:bg-sgs-red-dark text-white px-4 py-2 rounded-full font-semibold text-sm uppercase tracking-wider transition-colors"
                   >
                     {formatMessage({ id: "nav.signup" })}
                   </Link>
