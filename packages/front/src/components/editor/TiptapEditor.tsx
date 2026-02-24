@@ -1,129 +1,155 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useCallback } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import Placeholder from "@tiptap/extension-placeholder";
+import type { JSONContent } from "@tiptap/core";
 
-interface RichEditorProps {
-  content: string;
-  onChange: (html: string) => void;
+interface TiptapEditorProps {
+  content: JSONContent | null;
+  onChange: (json: JSONContent) => void;
   placeholder?: string;
 }
 
-export default function RichEditor({ content, onChange, placeholder }: RichEditorProps) {
-  const editorRef = useRef<HTMLDivElement>(null);
-
-  // Initialise the content on first mount only
-  useEffect(() => {
-    if (editorRef.current && !editorRef.current.innerHTML) {
-      editorRef.current.innerHTML = content ?? "";
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleInput = useCallback(() => {
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML);
-    }
-  }, [onChange]);
-
-  const exec = useCallback(
-    (cmd: string, value?: string) => {
-      document.execCommand(cmd, false, value);
-      editorRef.current?.focus();
-      handleInput();
+export default function TiptapEditor({ content, onChange, placeholder }: TiptapEditorProps) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Image,
+      Link.configure({ openOnClick: false }),
+      Placeholder.configure({ placeholder: placeholder ?? "Rédigez votre article…" }),
+    ],
+    content: content ?? undefined,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getJSON());
     },
-    [handleInput],
-  );
-
-  const handleHeading = (tag: string) => {
-    document.execCommand("formatBlock", false, tag);
-    editorRef.current?.focus();
-    handleInput();
-  };
+  });
 
   const handleImageUpload = useCallback(
     async (file: File) => {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const dataUrl = reader.result as string;
-        const [prefix, data] = dataUrl.split(",");
-        const mimeType = prefix.match(/:(.*?);/)?.[1] ?? "image/jpeg";
+      if (!editor) return;
+      const formData = new FormData();
+      formData.append("file", file);
 
-        const res = await fetch("/api/blog/upload", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ mimeType, data }),
-        });
+      const res = await fetch("/api/blog/upload", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
 
-        if (!res.ok) return;
-        const { url } = (await res.json()) as { url: string };
-        document.execCommand("insertImage", false, url);
-        handleInput();
-      };
-      reader.readAsDataURL(file);
+      if (!res.ok) return;
+      const { url } = (await res.json()) as { url: string };
+      editor.chain().focus().setImage({ src: url }).run();
     },
-    [handleInput],
+    [editor],
   );
+
+  if (!editor) return null;
 
   return (
     <div className="border border-gray-600 rounded-lg overflow-hidden bg-gray-800">
       {/* Toolbar */}
       <div className="flex flex-wrap gap-1 p-2 border-b border-gray-600 bg-gray-700">
-        <ToolBtn title="Gras" onClick={() => exec("bold")}>
+        <ToolBtn
+          title="Gras"
+          active={editor.isActive("bold")}
+          onClick={() => editor.chain().focus().toggleBold().run()}
+        >
           <strong>B</strong>
         </ToolBtn>
-        <ToolBtn title="Italique" onClick={() => exec("italic")}>
+        <ToolBtn
+          title="Italique"
+          active={editor.isActive("italic")}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+        >
           <em>I</em>
         </ToolBtn>
-        <ToolBtn title="Barré" onClick={() => exec("strikeThrough")}>
+        <ToolBtn
+          title="Barré"
+          active={editor.isActive("strike")}
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+        >
           <s>S</s>
         </ToolBtn>
         <Sep />
-        <ToolBtn title="Titre 2" onClick={() => handleHeading("h2")}>
+        <ToolBtn
+          title="Titre 2"
+          active={editor.isActive("heading", { level: 2 })}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        >
           H2
         </ToolBtn>
-        <ToolBtn title="Titre 3" onClick={() => handleHeading("h3")}>
+        <ToolBtn
+          title="Titre 3"
+          active={editor.isActive("heading", { level: 3 })}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        >
           H3
         </ToolBtn>
-        <ToolBtn title="Paragraphe" onClick={() => handleHeading("p")}>
-          ¶
-        </ToolBtn>
         <Sep />
-        <ToolBtn title="Liste à puces" onClick={() => exec("insertUnorderedList")}>
+        <ToolBtn
+          title="Liste à puces"
+          active={editor.isActive("bulletList")}
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+        >
           • —
         </ToolBtn>
-        <ToolBtn title="Liste numérotée" onClick={() => exec("insertOrderedList")}>
+        <ToolBtn
+          title="Liste numérotée"
+          active={editor.isActive("orderedList")}
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+        >
           1.
         </ToolBtn>
         <Sep />
+        <ToolBtn
+          title="Citation"
+          active={editor.isActive("blockquote")}
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        >
+          &ldquo;
+        </ToolBtn>
+        <ToolBtn
+          title="Code"
+          active={editor.isActive("codeBlock")}
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        >
+          {"</>"}
+        </ToolBtn>
+        <Sep />
         <ImageBtn onFile={handleImageUpload} />
+        <LinkBtn
+          active={editor.isActive("link")}
+          onLink={(url) => {
+            if (url) {
+              editor.chain().focus().setLink({ href: url }).run();
+            } else {
+              editor.chain().focus().unsetLink().run();
+            }
+          }}
+        />
         <Sep />
         <ToolBtn
           title="Annuler"
-          onClick={() => {
-            document.execCommand("undo");
-            handleInput();
-          }}
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
         >
           ↩
         </ToolBtn>
         <ToolBtn
           title="Rétablir"
-          onClick={() => {
-            document.execCommand("redo");
-            handleInput();
-          }}
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
         >
           ↪
         </ToolBtn>
       </div>
 
-      {/* Editable area */}
-      <div
-        ref={editorRef}
-        contentEditable
-        suppressContentEditableWarning
-        onInput={handleInput}
-        data-placeholder={placeholder ?? "Rédigez votre article…"}
-        className="prose prose-invert max-w-none p-4 min-h-64 focus:outline-none empty:before:content-[attr(data-placeholder)] empty:before:text-gray-500 empty:before:pointer-events-none"
+      {/* Editor area */}
+      <EditorContent
+        editor={editor}
+        className="prose prose-invert max-w-none p-4 min-h-64 [&_.tiptap]:outline-none [&_.tiptap.is-editor-empty::before]:content-[attr(data-placeholder)] [&_.tiptap.is-editor-empty::before]:text-gray-500 [&_.tiptap.is-editor-empty::before]:pointer-events-none [&_.tiptap.is-editor-empty::before]:float-left [&_.tiptap.is-editor-empty::before]:h-0"
       />
     </div>
   );
@@ -133,20 +159,31 @@ function ToolBtn({
   children,
   onClick,
   title,
+  active,
+  disabled,
 }: {
   children: React.ReactNode;
   onClick: () => void;
   title: string;
+  active?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
       title={title}
+      disabled={disabled}
       onMouseDown={(e) => {
-        e.preventDefault(); // keep editor focus
+        e.preventDefault();
         onClick();
       }}
-      className="px-2 py-1 rounded text-sm font-mono text-gray-300 hover:bg-gray-600 hover:text-white transition-colors"
+      className={`px-2 py-1 rounded text-sm font-mono transition-colors ${
+        disabled
+          ? "text-gray-600 cursor-not-allowed"
+          : active
+            ? "bg-gray-500 text-white"
+            : "text-gray-300 hover:bg-gray-600 hover:text-white"
+      }`}
     >
       {children}
     </button>
@@ -176,5 +213,24 @@ function ImageBtn({ onFile }: { onFile: (f: File) => void }) {
         }}
       />
     </>
+  );
+}
+
+function LinkBtn({ active, onLink }: { active: boolean; onLink: (url: string | null) => void }) {
+  return (
+    <ToolBtn
+      title="Lien"
+      active={active}
+      onClick={() => {
+        if (active) {
+          onLink(null);
+          return;
+        }
+        const url = window.prompt("URL du lien :");
+        if (url) onLink(url);
+      }}
+    >
+      🔗
+    </ToolBtn>
   );
 }

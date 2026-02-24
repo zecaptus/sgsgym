@@ -26,8 +26,7 @@ const MIME_BY_EXT: Record<string, string> = {
 const app = new Koa();
 const router = new Router();
 
-// Increase body size limit for base64 image uploads (~5 MB image → ~7 MB base64)
-app.use(bodyParser({ jsonLimit: "10mb" }));
+app.use(bodyParser({ jsonLimit: "2mb" }));
 app.use(sessionMiddleware);
 
 // Serve uploaded files at /uploads/:filename

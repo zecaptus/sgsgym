@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useIntl } from "react-intl";
+import type { JSONContent } from "@tiptap/core";
 import { useCreateBlogPostMutation } from "../../services/blog.js";
 import { useGetCategoriesQuery } from "../../services/blog.js";
 import TiptapEditor from "../../components/editor/TiptapEditor.js";
@@ -13,7 +14,7 @@ export default function AdminBlogNewPage() {
   const [excerpt, setExcerpt] = useState("");
   const [coverImage, setCoverImage] = useState("");
   const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
-  const [content, setContent] = useState<object>({});
+  const [content, setContent] = useState<JSONContent>({});
   const [error, setError] = useState<string | null>(null);
 
   const { data: categories } = useGetCategoriesQuery();
@@ -116,7 +117,7 @@ export default function AdminBlogNewPage() {
           <label className="block text-sm font-medium text-gray-300 mb-1">
             {formatMessage({ id: "admin.blog.content" })}*
           </label>
-          <TiptapEditor content={null} onChange={setContent} />
+          <TiptapEditor content={null} onChange={setContent} placeholder={formatMessage({ id: "admin.blog.contentPlaceholder" })} />
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}

@@ -1,56 +1,58 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useIntl } from "react-intl";
+import type { JSONContent } from "@tiptap/core";
 import {
   useGetBlogPostsQuery,
   useUpdateBlogPostMutation,
   usePublishBlogPostMutation,
   useGetCategoriesQuery,
+  type PostSummary,
 } from "../../services/blog.js";
 import TiptapEditor from "../../components/editor/TiptapEditor.js";
 
 export default function AdminBlogEditPage() {
   const { id } = useParams<{ id: string }>();
   const { formatMessage } = useIntl();
-  const navigate = useNavigate();
 
   const { data: posts } = useGetBlogPostsQuery();
+  const post = posts?.find((p) => p.id === Number(id));
+
+  if (!post) {
+    return <p className="text-gray-400">{formatMessage({ id: "common.loading" })}</p>;
+  }
+
+  // Key by post.id so the form resets when navigating between posts
+  return <AdminBlogEditForm key={post.id} post={post} />;
+}
+
+function AdminBlogEditForm({ post }: { post: PostSummary }) {
+  const { formatMessage } = useIntl();
+  const navigate = useNavigate();
+
   const { data: categories } = useGetCategoriesQuery();
   const [updatePost, { isLoading: isSaving }] = useUpdateBlogPostMutation();
   const [publishPost, { isLoading: isPublishing }] = usePublishBlogPostMutation();
 
-  const [title, setTitle] = useState("");
-  const [excerpt, setExcerpt] = useState("");
-  const [coverImage, setCoverImage] = useState("");
-  const [categoryId, setCategoryId] = useState<number | null>(null);
-  const [content, setContent] = useState<object>({});
-  const [published, setPublished] = useState(false);
+  const [title, setTitle] = useState(post.title);
+  const [excerpt, setExcerpt] = useState(post.excerpt ?? "");
+  const [coverImage, setCoverImage] = useState(post.coverImage ?? "");
+  const [categoryId, setCategoryId] = useState<number | null>(post.category?.id ?? null);
+  const [content, setContent] = useState<JSONContent>({});
+  const [published, setPublished] = useState(post.published);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
-  // We load from the list (already in cache) to avoid a slug-based lookup
-  const post = posts?.find((p) => p.id === Number(id));
-
   // Fetch full post content via slug
-  const [fullContent, setFullContent] = useState<object | null>(null);
+  const [fullContent, setFullContent] = useState<JSONContent | null>(null);
   useEffect(() => {
-    if (!post) return;
     fetch(`/api/blog/posts/${post.slug}`, { credentials: "include" })
       .then((r) => r.json())
-      .then((data: { content: object; published: boolean }) => {
+      .then((data: { content: JSONContent; published: boolean }) => {
         setFullContent(data.content);
         setPublished(data.published);
       });
-  }, [post]);
-
-  useEffect(() => {
-    if (!post) return;
-    setTitle(post.title);
-    setExcerpt(post.excerpt ?? "");
-    setCoverImage(post.coverImage ?? "");
-    setCategoryId(post.category?.id ?? null);
-    setPublished(post.published);
-  }, [post]);
+  }, [post.slug]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +60,7 @@ export default function AdminBlogEditPage() {
     setSaved(false);
     try {
       await updatePost({
-        id: Number(id),
+        id: post.id,
         title,
         content,
         excerpt: excerpt || undefined,
@@ -72,13 +74,9 @@ export default function AdminBlogEditPage() {
   };
 
   const handleTogglePublish = async () => {
-    await publishPost({ id: Number(id), published: !published });
+    await publishPost({ id: post.id, published: !published });
     setPublished((p) => !p);
   };
-
-  if (!post) {
-    return <p className="text-gray-400">{formatMessage({ id: "common.loading" })}</p>;
-  }
 
   return (
     <div className="max-w-3xl">

@@ -1,3 +1,4 @@
+import type { JSONContent } from "@tiptap/core";
 import { api } from "./api.js";
 
 export interface Category {
@@ -29,8 +30,7 @@ export interface PostSummary {
 }
 
 export interface BlogPost extends PostSummary {
-  // content is Tiptap JSON
-  content: object;
+  content: JSONContent;
 }
 
 const blogApi = api.injectEndpoints({
@@ -64,7 +64,7 @@ const blogApi = api.injectEndpoints({
     }),
     createBlogPost: builder.mutation<
       BlogPost,
-      { title: string; content: object; excerpt?: string; coverImage?: string; categoryId?: number }
+      { title: string; content: JSONContent; excerpt?: string; coverImage?: string; categoryId?: number }
     >({
       query: (body) => ({ url: "/blog/posts", method: "POST", body }),
       invalidatesTags: ["BlogPosts"],
@@ -74,7 +74,7 @@ const blogApi = api.injectEndpoints({
       {
         id: number;
         title: string;
-        content: object;
+        content: JSONContent;
         excerpt?: string;
         coverImage?: string;
         categoryId?: number | null;

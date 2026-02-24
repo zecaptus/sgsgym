@@ -1,4 +1,5 @@
 import Router from "@koa/router";
+import multer from "@koa/multer";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8,7 +9,9 @@ import { requirePermission } from "../middleware/requirePermission.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const uploadsDir = path.join(__dirname, "../../uploads");
 
-const ALLOWED_TYPES: Record<string, string> = {
+const ALLOWED_MIMES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+
+const EXT_BY_MIME: Record<string, string> = {
   "image/jpeg": "jpg",
   "image/png": "png",
   "image/webp": "webp",
@@ -17,46 +20,43 @@ const ALLOWED_TYPES: Record<string, string> = {
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
+const upload = multer({
+  limits: { fileSize: MAX_SIZE_BYTES },
+  fileFilter: (_req, file, cb) => {
+    if (ALLOWED_MIMES.has(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Unsupported image type. Allowed: JPEG, PNG, WebP, GIF"), false);
+    }
+  },
+  storage: multer.memoryStorage(),
+});
+
 const router = new Router({ prefix: "/api/blog" });
 
 /**
  * POST /api/blog/upload
- * Body: { mimeType: string; data: string } — base64-encoded image
+ * Body: multipart/form-data with a "file" field
  */
 router.post(
   "/upload",
   requireAuth,
   requirePermission("blog:create"),
+  upload.single("file"),
   async (ctx) => {
-    const { mimeType, data } = ctx.request.body as {
-      mimeType?: string;
-      data?: string;
-    };
+    const file = ctx.file;
 
-    if (!mimeType || !data) {
+    if (!file) {
       ctx.status = 400;
-      ctx.body = { error: "mimeType and data (base64) are required" };
-      return;
-    }
-
-    const ext = ALLOWED_TYPES[mimeType];
-    if (!ext) {
-      ctx.status = 400;
-      ctx.body = { error: "Unsupported image type. Allowed: JPEG, PNG, WebP, GIF" };
-      return;
-    }
-
-    const buffer = Buffer.from(data, "base64");
-    if (buffer.byteLength > MAX_SIZE_BYTES) {
-      ctx.status = 400;
-      ctx.body = { error: "Image exceeds 5 MB limit" };
+      ctx.body = { error: "A file is required" };
       return;
     }
 
     await fs.mkdir(uploadsDir, { recursive: true });
 
+    const ext = EXT_BY_MIME[file.mimetype] ?? "bin";
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    await fs.writeFile(path.join(uploadsDir, filename), buffer);
+    await fs.writeFile(path.join(uploadsDir, filename), file.buffer);
 
     ctx.status = 201;
     ctx.body = { url: `/uploads/${filename}` };
