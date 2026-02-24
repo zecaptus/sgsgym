@@ -9,10 +9,16 @@ import LoginPage from "./pages/LoginPage.js";
 import SignupPage from "./pages/SignupPage.js";
 import ForbiddenPage from "./pages/ForbiddenPage.js";
 import NotFoundPage from "./pages/NotFoundPage.js";
+import BlogListPage from "./pages/BlogListPage.js";
+import BlogPostPage from "./pages/BlogPostPage.js";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.js";
 import AdminUsersPage from "./pages/admin/AdminUsersPage.js";
 import AdminRolesPage from "./pages/admin/AdminRolesPage.js";
 import AdminRoleEditPage from "./pages/admin/AdminRoleEditPage.js";
+import AdminBlogPage from "./pages/admin/AdminBlogPage.js";
+import AdminBlogNewPage from "./pages/admin/AdminBlogNewPage.js";
+import AdminBlogEditPage from "./pages/admin/AdminBlogEditPage.js";
+import AdminBlogCategoriesPage from "./pages/admin/AdminBlogCategoriesPage.js";
 
 export default function App() {
   return (
@@ -20,6 +26,8 @@ export default function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="blog" element={<BlogListPage />} />
+          <Route path="blog/:slug" element={<BlogPostPage />} />
 
           {/* Guest-only routes */}
           <Route element={<GuestGuard />}>
@@ -35,6 +43,10 @@ export default function App() {
                 <Route path="users" element={<AdminUsersPage />} />
                 <Route path="roles" element={<AdminRolesPage />} />
                 <Route path="roles/:id" element={<AdminRoleEditPage />} />
+                <Route path="blog" element={<AdminBlogPage />} />
+                <Route path="blog/new" element={<AdminBlogNewPage />} />
+                <Route path="blog/:id/edit" element={<AdminBlogEditPage />} />
+                <Route path="blog/categories" element={<AdminBlogCategoriesPage />} />
               </Route>
             </Route>
           </Route>

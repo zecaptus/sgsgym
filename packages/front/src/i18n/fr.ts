@@ -1,6 +1,7 @@
 const messages: Record<string, string> = {
   // Nav
   "nav.home": "Accueil",
+  "nav.blog": "Blog",
   "nav.login": "Connexion",
   "nav.signup": "Inscription",
   "nav.admin": "Administration",
@@ -144,6 +145,40 @@ const messages: Record<string, string> = {
   "error.notFound.message": "La page que vous recherchez n'existe pas.",
   "error.notFound.back": "Retour à l'accueil",
   "error.generic": "Une erreur est survenue.",
+
+  // Blog - Public
+  "blog.title": "ACTUALITÉS",
+  "blog.subtitle": "Résultats, entraînements, vie du club.",
+  "blog.noPosts": "Aucun article pour le moment.",
+  "blog.backToList": "Retour aux articles",
+
+  // Blog - Admin
+  "admin.blog.title": "Gestion du blog",
+  "admin.blog.new": "Nouvel article",
+  "admin.blog.newPost": "Nouvel article",
+  "admin.blog.editPost": "Modifier l'article",
+  "admin.blog.noPosts": "Aucun article.",
+  "admin.blog.backToList": "Retour à la liste",
+  "admin.blog.publish": "Publier",
+  "admin.blog.unpublish": "Dépublier",
+  "admin.blog.deleteConfirm": "Confirmer la suppression de « {title} » ?",
+  "admin.blog.saved": "Article enregistré.",
+  "admin.blog.saveDraft": "Enregistrer le brouillon",
+  "admin.blog.postTitle": "Titre",
+  "admin.blog.postTitlePlaceholder": "Titre de l'article…",
+  "admin.blog.excerpt": "Extrait",
+  "admin.blog.excerptPlaceholder": "Courte description affichée dans la liste…",
+  "admin.blog.content": "Contenu",
+  "admin.blog.category": "Catégorie",
+  "admin.blog.noCategory": "Sans catégorie",
+  "admin.blog.coverImage": "Image de couverture",
+  "admin.blog.categories": "Catégories",
+
+  // Blog categories admin
+  "admin.blog.categories.title": "Gestion des catégories",
+  "admin.blog.categories.namePlaceholder": "Nom de la catégorie…",
+  "admin.blog.categories.createError": "Cette catégorie existe déjà.",
+  "admin.blog.categories.deleteConfirm": "Supprimer la catégorie « {name} » ?",
 
   // Common
   "common.loading": "Chargement...",
