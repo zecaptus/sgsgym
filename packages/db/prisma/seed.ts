@@ -15,6 +15,11 @@ const PERMISSIONS = [
   { name: "roles:delete", description: "Delete roles" },
   { name: "permissions:read", description: "View permissions" },
   { name: "admin:access", description: "Access admin panel" },
+  { name: "blog:create", description: "Create blog posts" },
+  { name: "blog:update", description: "Update blog posts" },
+  { name: "blog:delete", description: "Delete blog posts" },
+  { name: "blog:publish", description: "Publish/unpublish blog posts" },
+  { name: "blog:manage-categories", description: "Manage blog categories" },
 ] as const;
 
 async function main() {
@@ -52,6 +57,12 @@ async function main() {
     create: { name: "customer", description: "Regular customer" },
   });
 
+  const editorRole = await prisma.role.upsert({
+    where: { name: "editor" },
+    update: {},
+    create: { name: "editor", description: "Blog content editor" },
+  });
+
   // Assign permissions to roles
   // Admin gets all permissions
   for (const perm of permissions) {
@@ -62,14 +73,42 @@ async function main() {
     });
   }
 
-  // Moderator gets read permissions + admin:access
-  const moderatorPerms = ["users:read", "roles:read", "permissions:read", "admin:access"];
+  // Moderator gets read permissions + admin:access + blog write
+  const moderatorPerms = [
+    "users:read",
+    "roles:read",
+    "permissions:read",
+    "admin:access",
+    "blog:create",
+    "blog:update",
+    "blog:delete",
+    "blog:publish",
+    "blog:manage-categories",
+  ];
   for (const permName of moderatorPerms) {
     const perm = permissionMap[permName];
     await prisma.rolePermission.upsert({
       where: { roleId_permissionId: { roleId: moderatorRole.id, permissionId: perm.id } },
       update: {},
       create: { roleId: moderatorRole.id, permissionId: perm.id },
+    });
+  }
+
+  // Editor gets blog permissions + admin:access
+  const editorPerms = [
+    "admin:access",
+    "blog:create",
+    "blog:update",
+    "blog:delete",
+    "blog:publish",
+    "blog:manage-categories",
+  ];
+  for (const permName of editorPerms) {
+    const perm = permissionMap[permName];
+    await prisma.rolePermission.upsert({
+      where: { roleId_permissionId: { roleId: editorRole.id, permissionId: perm.id } },
+      update: {},
+      create: { roleId: editorRole.id, permissionId: perm.id },
     });
   }
 
@@ -88,6 +127,7 @@ async function main() {
     const devUsers = [
       { email: "admin@sgsgym.dev", name: "Admin", password: "admin123", roleId: adminRole.id },
       { email: "moderator@sgsgym.dev", name: "Moderator", password: "moderator123", roleId: moderatorRole.id },
+      { email: "editor@sgsgym.dev", name: "Editor", password: "editor123", roleId: editorRole.id },
       { email: "customer@sgsgym.dev", name: "Customer", password: "customer123", roleId: moderatorRole.id },
     ];
 

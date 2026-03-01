@@ -13,6 +13,7 @@ const navItems: NavItem[] = [
   { to: "/admin", label: "nav.dashboard", end: true },
   { to: "/admin/users", label: "nav.users", end: false },
   { to: "/admin/roles", label: "nav.roles", end: false, permission: "roles:read" },
+  { to: "/admin/blog", label: "nav.blog", end: false, permission: "blog:create" },
 ];
 
 export default function AdminLayout() {

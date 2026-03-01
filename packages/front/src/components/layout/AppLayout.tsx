@@ -33,6 +33,12 @@ export default function AppLayout() {
               >
                 {formatMessage({ id: "nav.home" })}
               </Link>
+              <Link
+                to="/blog"
+                className="text-gray-300 hover:text-white transition-colors"
+              >
+                {formatMessage({ id: "nav.blog" })}
+              </Link>
               {user ? (
                 <>
                   {hasAdminAccess && (
